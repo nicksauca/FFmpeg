@@ -1,0 +1,88 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.actemium.miist</groupId>
+    <artifactId>ffmpeg</artifactId>
+    <packaging>pom</packaging>
+    <version>100.0.0</version>
+    <name>FFmpeg</name>
+    <description>FFmpeg custom</description>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <repositories>
+        <repository>
+            <id>nexus</id>
+            <url>http://nexus.miist.fr/content/groups/public</url>
+        </repository>
+    </repositories>
+
+    <distributionManagement>
+        <repository>
+            <id>nexus</id>
+            <name>Nexus MIIST Releases</name>
+            <url>${env.NEXUS_SERVER}/content/repositories/releases/</url>
+        </repository>
+        <snapshotRepository>
+            <id>nexus</id>
+            <name>Nexus MIIST Snapshots</name>
+            <url>${env.NEXUS_SERVER}/content/repositories/snapshots/</url>
+        </snapshotRepository>
+    </distributionManagement>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.vafer</groupId>
+                <artifactId>jdeb</artifactId>
+                <version>1.5</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>jdeb</goal>
+                        </goals>
+                        <configuration>
+                            <skipPOMs>false</skipPOMs>
+                            <verbose>false</verbose>
+                            <snapshotExpand>false</snapshotExpand>
+                            <snapshotEnv>USER</snapshotEnv>
+                            <controlDir>control</controlDir>
+                            <deb>[[buildDir]]/[[artifactId]]_[[version]].[[extension]]</deb>
+                            <dataSet>
+                                <data>
+                                    <src>ffmpeg</src>
+                                    <dst>/usr/bin/ffmpeg</dst>
+                                    <type>file</type>
+                                    <conffile>false</conffile>
+                                    <mapper>
+                                        <type>perm</type>
+                                        <user>root</user>
+                                        <group>root</group>
+                                        <filemode>755</filemode>
+                                    </mapper>
+                                </data>
+                                <data>
+                                    <src>ffprobe</src>
+                                    <dst>/usr/bin/ffprobe</dst>
+                                    <type>file</type>
+                                    <conffile>false</conffile>
+                                    <mapper>
+                                        <type>perm</type>
+                                        <user>root</user>
+                                        <group>root</group>
+                                        <filemode>755</filemode>
+                                    </mapper>
+                                </data>
+                            </dataSet>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>

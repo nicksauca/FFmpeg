@@ -1,0 +1,8 @@
+Package: [[artifactId]]
+Version: [[version]]
+Section: base
+Priority: optional
+Architecture: all
+Depends: yasm, libx264-dev, libx265-dev, libnuma-dev, libva-dev
+Maintainer: Actemium <nicolae.sauca@actemium.com>
+Description: [[name]]
