@@ -76,8 +76,8 @@
 
 #define COMMON_OPTS() \
     { "reorder_queue_size", "set number of packets to buffer for handling of reordered packets", OFFSET(reordering_queue_size), AV_OPT_TYPE_INT, { .i64 = -1 }, -1, INT_MAX, DEC }, \
-    { "buffer_size",        "Underlying protocol send/receive buffer size",                  OFFSET(buffer_size),           AV_OPT_TYPE_INT, { .i64 = -1 }, -1, INT_MAX, DEC|ENC } \
-
+    { "buffer_size",        "Underlying protocol send/receive buffer size",                  OFFSET(buffer_size),           AV_OPT_TYPE_INT, { .i64 = -1 }, -1, INT_MAX, DEC|ENC }, \
+    { "timeout", "set timeout (in tenths of a seconds)", OFFSET(timeout), AV_OPT_TYPE_INT, {.i64 = MAX_TIMEOUTS}, 0, 1000000, DEC } \
 
 const AVOption ff_rtsp_options[] = {
     { "initial_pause",  "do not start playing the stream immediately", OFFSET(initial_pause), AV_OPT_TYPE_BOOL, {.i64 = 0}, 0, 1, DEC },
@@ -2028,7 +2028,7 @@ static int udp_read_packet(AVFormatContext *s, RTSPStream **prtsp_st,
                 }
             }
 #endif
-        } else if (n == 0 && ++timeout_cnt >= MAX_TIMEOUTS) {
+        } else if (n == 0 && ++timeout_cnt >= rt->timeout) {
             return AVERROR(ETIMEDOUT);
         } else if (n < 0 && errno != EINTR)
             return AVERROR(errno);
